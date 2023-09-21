@@ -93,7 +93,91 @@
        print(result)
    ```
 
-These are some of the essential methods and functions provided by `asyncio` in Python. They enable you to write efficient asynchronous code that can handle I/O-bound and network-bound tasks without blocking the main program flow.
+9. **Working with Semaphores**:
+   - `asyncio.Semaphore(value)`: Create a semaphore with the specified value. Semaphores are useful for controlling access to a limited resource.
+
+   Example:
+   ```python
+   async def worker(semaphore):
+       async with semaphore:
+           print("Working...")
+           await asyncio.sleep(1)
+           print("Done")
+
+   async def main():
+       semaphore = asyncio.Semaphore(2)  # Allow two workers at a time
+       await asyncio.gather(worker(semaphore), worker(semaphore))
+   ```
+
+10. **Timeouts**:
+    - `asyncio.wait_for(coro, timeout)`: Set a timeout for a coroutine, raising `asyncio.TimeoutError` if it doesn't complete within the specified time.
+
+    Example:
+    ```python
+    async def slow_operation():
+        await asyncio.sleep(3)
+
+    async def main():
+        try:
+            await asyncio.wait_for(slow_operation(), timeout=2)
+        except asyncio.TimeoutError:
+            print("Operation timed out")
+    ```
+
+11. **Cancelling Tasks**:
+    - `task.cancel()`: Cancel a running task.
+
+    Example:
+    ```python
+    async def foo():
+        try:
+            while True:
+                await asyncio.sleep(1)
+        except asyncio.CancelledError:
+            print("Task foo was cancelled")
+
+    async def main():
+        task = asyncio.create_task(foo())
+        await asyncio.sleep(3)
+        task.cancel()
+    ```
+
+12. **Event Handling with Callbacks**:
+    - `loop.add_reader(fd, callback)`: Register a callback to be called when there is data available to read on a file descriptor.
+    - `loop.add_writer(fd, callback)`: Register a callback to be called when a file descriptor is ready for writing.
+
+    Example (listening for keyboard input):
+    ```python
+    import asyncio
+
+    def on_keyboard_input():
+        data = input("Enter something: ")
+        print(f"You entered: {data}")
+
+    def main():
+        loop = asyncio.get_event_loop()
+        loop.add_reader(0, on_keyboard_input)
+        loop.run_forever()
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+13. **Creating and Using Locks**:
+    - `asyncio.Lock()`: Create a lock that can be used to synchronize access to shared resources in concurrent coroutines.
+
+    Example:
+    ```python
+    async def worker(lock):
+        async with lock:
+            print("Locked...")
+            await asyncio.sleep(1)
+            print("Unlocked")
+
+    async def main():
+        lock = asyncio.Lock()
+        await asyncio.gather(worker(lock), worker(lock))
+    ```
 
 Asynchronous programming in Python allows you to write non-blocking, concurrent code that can improve the performance of I/O-bound and network-bound tasks. Python's `asyncio` library is the primary tool for asynchronous programming. Here's an overview of how asynchronous programming works in Python:
 
