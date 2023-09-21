@@ -1,3 +1,14 @@
+"""_summary_
+    Using Asyncio, you can structure your code so subtasks are defined as coroutines and
+    allows you to schedule them as you please, including simultaneously.
+    Coroutines contain yield points where we define possible points where a
+    context switch can happen if other tasks are pending, but will not if no other task is pending.
+    A context switch in asyncio represents the event loop yielding the flow of control from one coroutine to the next.
+    In the process below, we run 3 async tasks that query Reddit separately, extract and print the JSON.
+    We leverage aiohttp which is a http client library ensuring even the HTTP request runs asynchronously.
+    Returns:
+        _type_: _description_
+"""
 import signal
 import sys
 import asyncio
@@ -15,7 +26,7 @@ async def get_json(client, url):
 async def get_reddit_top(subreddit, client):
     data1 = await get_json(
         client,
-        f'https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=10',
+        f'https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5',
     )
 
     j = json.loads(data1.decode('utf-8'))
@@ -25,7 +36,7 @@ async def get_reddit_top(subreddit, client):
         link = i['data']['url']
         print(f'{str(score)}: {title} ({link})')
 
-    print('DONE:', subreddit + '\n')
+    print(f'DONE: ,  {subreddit}\n')
 
 def signal_handler(signal, frame):
     loop.stop()
