@@ -46,3 +46,5 @@ Asynchronous programming offers several advantages, especially in scenarios wher
 9. **Predictable Performance**: Because async programming doesn't rely on the availability of physical CPU cores, it can provide more predictable performance across different hardware and platforms. It's less affected by variations in hardware capabilities.
 
 10. **Energy Efficiency**: Asynchronous programs can be more energy-efficient because they minimize the need to keep CPU cores active while waiting for I/O or user input, which can lead to reduced power consumption on mobile devices and servers.
+
+Peep this article introduction to [Asyncronous programming](https://medium.com/velotio-perspectives/an-introduction-to-asynchronous-programming-in-python-af0189a88bbb) by Velotio Technologies
